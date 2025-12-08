@@ -1,6 +1,7 @@
 import Header from '@/components/layout/Header';
 import "./globals.css";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SportProvider } from "@/components/sport/SportContext";
 import { SITE_NAME, SITE_URL } from "@/lib/siteConfig";
 import { Analytics } from "@vercel/analytics/react";
@@ -49,10 +50,12 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://use.typekit.net/iqh7sda.css" />
       </head>
       <body className="bg-slate-950 text-white">
-        <SportProvider>
-          <Header />
-          {children}
-        </SportProvider>
+        <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+          <SportProvider>
+            <Header />
+            {children}
+          </SportProvider>
+        </Suspense>
         <Analytics />
       </body>
     </html>
