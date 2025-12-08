@@ -39,6 +39,20 @@ export default function Header() {
     setMobileMenuOpen(false);
   };
 
+  const handleSportChange = (sport: 'football' | 'basketball') => {
+    setSport(sport);
+    
+    // On mobile, scroll to athlete content after changing sport
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setTimeout(() => {
+        const athleteContent = document.getElementById('athlete-content');
+        if (athleteContent) {
+          athleteContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <header className="fixed inset-x-0 top-0 z-40">
       {/* Top strip – Desktop only */}
@@ -122,7 +136,7 @@ export default function Header() {
           <div className="flex items-center justify-center gap-4 md:gap-8 text-xs md:text-sm font-medium">
             <button
               type="button"
-              onClick={() => setSport('football')}
+              onClick={() => handleSportChange('football')}
               className={[
                 'pb-1 transition-colors w-16 md:w-20 text-center',
                 isFootball
@@ -135,7 +149,7 @@ export default function Header() {
 
             <button
               type="button"
-              onClick={() => setSport('basketball')}
+              onClick={() => handleSportChange('basketball')}
               className={[
                 'pb-1 transition-colors w-16 md:w-20 text-center',
                 !isFootball
