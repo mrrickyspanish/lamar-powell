@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd lamar-powell && npm run build",
+  "devCommand": "cd lamar-powell && npm run dev",
+  "installCommand": "cd lamar-powell && npm install",
+  "framework": "nextjs",
+  "outputDirectory": "lamar-powell/.next"
+}
