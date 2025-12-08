@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSport } from '@/components/sport/SportContext';
 
 type ShareState = 'closed' | 'open';
@@ -9,6 +9,7 @@ type ShareState = 'closed' | 'open';
 export default function Header() {
   const { currentSport, setSport } = useSport();
   const [shareState, setShareState] = useState<ShareState>('closed');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isFootball = currentSport === 'football';
   const accentColor = isFootball ? '#fbbf24' : '#22d3ee';
@@ -31,12 +32,17 @@ export default function Header() {
     }
 
     setShareState('closed');
+    setMobileMenuOpen(false);
+  };
+
+  const handleNavClick = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
     <header className="fixed inset-x-0 top-0 z-40">
-      {/* Top strip – Nike style utility bar */}
-      <div className="bg-black text-[11px] uppercase tracking-[0.2em] text-white/60">
+      {/* Top strip – Desktop only */}
+      <div className="hidden md:block bg-black text-[11px] uppercase tracking-[0.2em] text-white/60">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
           <span>Coach Tools</span>
 
@@ -86,9 +92,9 @@ export default function Header() {
 
       {/* Main nav – logo / sport toggle / measurables */}
       <div className="border-b border-white/10 bg-black/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 md:px-6 py-3">
           {/* LEFT – Jersey badge with shimmer */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <motion.div
               key={currentSport}
               initial={{ boxShadow: `0 0 0 0 ${accentColor}00`, opacity: 0.9 }}
@@ -101,24 +107,24 @@ export default function Header() {
                 opacity: 1,
               }}
               transition={{ duration: 0.75, ease: 'easeOut' }}
-              className="relative flex h-10 w-12 items-center justify-center rounded-full border border-white/25 bg-zinc-900 text-white"
+              className="relative flex h-9 w-10 md:h-10 md:w-12 items-center justify-center rounded-full border border-white/25 bg-zinc-900 text-white"
             >
-              <span className="text-[10px] font-black italic tracking-tight">
+              <span className="text-[9px] md:text-[10px] font-black italic tracking-tight">
                 {jerseyNumber}
               </span>
             </motion.div>
-            <span className="hidden text-xs text-white/70 sm:block">
+            <span className="hidden sm:block text-xs text-white/70">
               Class of 2028
             </span>
           </div>
 
           {/* CENTER – sport toggle */}
-          <div className="flex items-center justify-center gap-8 text-sm font-medium">
+          <div className="flex items-center justify-center gap-4 md:gap-8 text-xs md:text-sm font-medium">
             <button
               type="button"
               onClick={() => setSport('football')}
               className={[
-                'pb-1 transition-colors w-20 text-center',
+                'pb-1 transition-colors w-16 md:w-20 text-center',
                 isFootball
                   ? 'border-b-2 border-amber-400 text-amber-300'
                   : 'border-b-2 border-transparent text-white/60 hover:text-white',
@@ -131,7 +137,7 @@ export default function Header() {
               type="button"
               onClick={() => setSport('basketball')}
               className={[
-                'pb-1 transition-colors w-20 text-center',
+                'pb-1 transition-colors w-16 md:w-20 text-center',
                 !isFootball
                   ? 'border-b-2 border-cyan-300 text-cyan-200'
                   : 'border-b-2 border-transparent text-white/60 hover:text-white',
@@ -141,14 +147,92 @@ export default function Header() {
             </button>
           </div>
 
-          {/* RIGHT – measurables badge */}
-          <div className="hidden items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-[11px] font-semibold text-white/80 shadow-sm sm:flex">
-            {measurables.map((item) => (
-              <span key={item}>{item}</span>
-            ))}
+          {/* RIGHT – Mobile menu button / Desktop measurables */}
+          <div className="flex items-center">
+            {/* Mobile hamburger menu */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden flex flex-col gap-1.5 p-2"
+              aria-label="Menu"
+            >
+              <span className={`block h-0.5 w-6 bg-white/80 transition-transform ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`block h-0.5 w-6 bg-white/80 transition-opacity ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block h-0.5 w-6 bg-white/80 transition-transform ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            </button>
+
+            {/* Desktop measurables */}
+            <div className="hidden md:flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-[11px] font-semibold text-white/80 shadow-sm">
+              {measurables.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+          >
+            <nav className="px-6 py-4 space-y-4">
+              {/* Measurables on mobile */}
+              <div className="flex flex-wrap gap-2 pb-3 border-b border-white/10">
+                {measurables.map((item) => (
+                  <span key={item} className="bg-white/10 px-3 py-1.5 rounded-full text-[10px] font-semibold text-white/80">
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              <a 
+                href="#athlete-content" 
+                onClick={handleNavClick}
+                className="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-wider"
+              >
+                Stats
+              </a>
+              <a 
+                href="#schedule" 
+                onClick={handleNavClick}
+                className="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-wider"
+              >
+                Schedule
+              </a>
+              <a 
+                href="#contact" 
+                onClick={handleNavClick}
+                className="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-wider"
+              >
+                Contact
+              </a>
+              
+              {/* Mobile share buttons */}
+              <div className="pt-3 border-t border-white/10 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => copyLink('football')}
+                  className="w-full text-left text-sm text-white/70 hover:text-white py-2 uppercase tracking-wider"
+                >
+                  Share Football Profile
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copyLink('basketball')}
+                  className="w-full text-left text-sm text-white/70 hover:text-white py-2 uppercase tracking-wider"
+                >
+                  Share Basketball Profile
+                </button>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
