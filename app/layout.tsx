@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: SITE_NAME,
     description:
-      "Running Back & Guard from Elgin High School with verified film, advanced stats, and coach contact tools.",
+      "Class of 2028 dual-sport athlete LaMarin Powell — verified film, stats, schedule, and recruiting contact for college coaches.",
     url: SITE_URL,
     siteName: SITE_NAME,
     images: [
