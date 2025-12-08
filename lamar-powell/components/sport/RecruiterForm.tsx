@@ -56,9 +56,9 @@ export default function RecruiterForm() {
       });
 
       setTimeout(() => setState("idle"), 5000);
-    } catch (err: any) {
+    } catch (err) {
       setState("error");
-      setError(err.message || "Something went wrong");
+      setError(err instanceof Error ? err.message : "Something went wrong");
     }
   }
 

@@ -13,7 +13,7 @@ export default function CoachTestimonial() {
           
           <blockquote className="text-center pt-4">
             <p className="text-lg md:text-xl text-white/90 font-medium leading-relaxed mb-4">
-              "LaMarin is the kind of athlete who makes everyone around him better — disciplined, coachable, and team-first."
+              &ldquo;LaMarin is the kind of athlete who makes everyone around him better — disciplined, coachable, and team-first.&rdquo;
             </p>
             <cite className="not-italic text-sm text-slate-400">
               — Coach Mike Henderson, Elgin High School
