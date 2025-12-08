@@ -59,7 +59,7 @@ export default function ScheduleSection() {
             <p className="mt-1 text-sm md:text-base text-slate-300">
               When and where coaches can see LaMarin live for{' '}
               <span className="font-semibold">
-                {currentSport === 'football' ? 'football' : 'basketball'}
+                basketball
               </span>
               .
             </p>
